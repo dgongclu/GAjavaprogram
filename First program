@@ -1,0 +1,137 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
+
+public class analysis {
+  public static void main(String[] args) {
+		ArrayList<String> data = readdata("D:\\out.txt");
+		ArrayList<String> result = Analysis(data);
+		writedata(result,"D:\\result.txt");
+}
+
+private  static ArrayList<String> readdata(String path){       //use to read data from the txt file
+		String r;
+		ArrayList<String> data = new ArrayList<String>();
+		FileReader f = null ;
+		BufferedReader b = null ;
+		try{
+			f = new FileReader(path);
+		    b = new BufferedReader(f);
+		 while((r =  b.readLine())!= null) {     
+             if(r !=  null && !r.equals("")  )     
+             {    
+            	 data.add(r);
+             }            
+         }
+		}
+		catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	finally{
+		try{
+	     f.close();
+	     b.close();
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		 return data;
+	}
+	}
+
+private static ArrayList<String> Analysis(ArrayList<String> data){
+	String dataperline;
+	String[] dataeach=null;
+	String resultperline;
+	String year="";
+	String date="";
+	int i,b=0;
+	String EditorId="",EditorName="",MonitorId="",MonitorName="";
+	String Votestatus="",Userid="",day="",time="",Username="";
+	ArrayList<String> result =new ArrayList(); 
+	
+	for (i=0; i< data.size();i++){
+		dataperline=data.get(i);
+		dataeach = dataperline.split("\\s+");
+	
+		if (dataeach[0].equals("E")){
+			if(dataeach[1].equals("1")){
+				b=1;
+			}
+			else b=0;
+		}
+		else if(dataeach[0].equals("T")){
+			year=dataeach[1];
+		    date=dataeach[2];
+		}
+		else if(dataeach[0].equals("U")){
+			EditorId=dataeach[1];
+			EditorName=dataeach[2];
+		}
+		else if(dataeach[0].equals("N")){
+			MonitorId=dataeach[1];
+			MonitorName=dataeach[2];
+		}
+		else if (dataeach[0].equals("V")){
+			Votestatus=dataeach[1];
+			Userid=dataeach[2];
+			day=dataeach[3];
+			time=dataeach[4];
+			Username=dataeach[5];
+		}
+		resultperline=b+","+year+" "+date+","+EditorId+","+EditorName+","+MonitorId+","+MonitorName+","+Votestatus+","+Userid+","+day+" "+time+","+Username;
+		result.add(resultperline+"\n");
+	}
+	return result;
+	
+}
+
+
+private  static void writedata(ArrayList<String> data,String path){         //use to write a data to a file
+	 FileWriter f = null;
+	 BufferedWriter b = null ;
+	 String r;
+	if (data.size() > 0 ){
+	   try {
+		  f = new FileWriter(path);
+		  b = new BufferedWriter(f); 
+         for (int i = 0 ; i < data.size() ; i ++ ){
+       	  r = data.get(i); 
+       	  b.write(r); 
+	          b.newLine();
+	      }
+         b.flush();
+       
+	   } catch (IOException e) {
+		   // TODO Auto-generated catch block
+		   e.printStackTrace();
+		  
+	    }
+      finally{
+	try{
+			f.close();
+			b.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}  
+	}
+}
+
+}
+
+
+
+
+
